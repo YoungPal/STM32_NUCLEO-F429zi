@@ -108,7 +108,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		{
 			static int i=0;
 			//printf("%d\r\n",rx3ch);
-			printf("%c\r\n",rx3ch);
+			//printf("%c\r\n",rx3ch);
 			//printf("\r\n");
 			rx3Data[i]=rx3ch;
 			if(rx3Data[i]=='\r')
@@ -192,15 +192,17 @@ int main(void)
   {
 	  if(rx3Flag)
 	  {
-		  printf("rx3Data : %s\r\n", rx3Data);
+		  char sendTemp[50]={0, };
+		  sprintf(sendTemp, "rx3Data : %s\r\n", rx3Data);
+  		  Serial3_Send_String(sendTemp);
 		  rx3Flag=0;
 		  strncpy(rx3Data, "", 50);
 	  }
 	  if(rx2Flag)
 	  	  {
 		  	  char sendTemp[50]={0, };
-	  		  printf("rx2Data : %s\r\n", rx2Data);
 	  		  sprintf(sendTemp, "rx2Data : %s\r\n", rx2Data);
+	  		  Serial3_Send_String(sendTemp);
 	  		  Serial2_Send_String(sendTemp);
 	  		  rx2Flag=0;
 	  		  strncpy(rx2Data, "", 50);
