@@ -55,7 +55,8 @@ extern uint8_t rx2ch;
 extern char rx2Data[50];
 extern unsigned char rx2Flag;
 
-extern char sendBuf[50];
+char sendBuf[50];
+
 
 /* USER CODE END PV */
 
@@ -74,7 +75,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 
 /* USER CODE END 0 */
 
@@ -124,15 +124,17 @@ int main(void)
   {
 	  if(rx3Flag)
 	  {
-		  printf("rx3Data : %s\r\n", rx3Data);
+		  char sendTemp[50]={0, };
+		  sprintf(sendTemp, "rx3Data : %s\r\n", rx3Data);
+  		  Serial3_Send_String(sendTemp);
 		  rx3Flag=0;
 		  strncpy(rx3Data, "", 50);
 	  }
 	  if(rx2Flag)
 	  	  {
 		  	  char sendTemp[50]={0, };
-	  		  printf("rx2Data : %s\r\n", rx2Data);
 	  		  sprintf(sendTemp, "rx2Data : %s\r\n", rx2Data);
+	  		  Serial3_Send_String(sendTemp);
 	  		  Serial2_Send_String(sendTemp);
 	  		  rx2Flag=0;
 	  		  strncpy(rx2Data, "", 50);

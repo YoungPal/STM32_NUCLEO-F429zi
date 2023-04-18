@@ -28,8 +28,6 @@ unsigned char rx3Flag=0;
 uint8_t rx2ch;
 char rx2Data[50];
 unsigned char rx2Flag=0;
-
-char sendBuf[50];
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart2;
@@ -145,6 +143,9 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+    /* USART3 interrupt Init */
+    HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(USART3_IRQn);
   /* USER CODE BEGIN USART3_MspInit 1 */
 
   /* USER CODE END USART3_MspInit 1 */
@@ -188,6 +189,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     */
     HAL_GPIO_DeInit(GPIOD, STLK_RX_Pin|STLK_TX_Pin);
 
+    /* USART3 interrupt Deinit */
+    HAL_NVIC_DisableIRQ(USART3_IRQn);
   /* USER CODE BEGIN USART3_MspDeInit 1 */
 
   /* USER CODE END USART3_MspDeInit 1 */
@@ -195,7 +198,6 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-
 void Serial3_Send(unsigned char c)
 {
 	HAL_UART_Transmit(&huart3, &c, 1, 10);
@@ -223,16 +225,11 @@ void Serial2_Send_String(char* s)
 		s++;
 	}
 }
-
-
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == USART3)
 		{
 			static int i=0;
-			//printf("%d\r\n",rx3ch);
-			printf("%c\r\n",rx3ch);
-			//printf("\r\n");
 			rx3Data[i]=rx3ch;
 			if(rx3Data[i]=='\r')
 			{
@@ -249,9 +246,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	else if(huart->Instance == USART2)
 	{
 		static int i=0;
-		//printf("%d\r\n",rx3ch);
-		//printf("%c\r\n",rx2ch);
-		//printf("\r\n");
 		rx2Data[i]=rx2ch;
 		if(rx2Data[i]=='\r')
 		{

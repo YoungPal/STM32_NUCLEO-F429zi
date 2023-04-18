@@ -44,10 +44,7 @@ void MX_USART2_UART_Init(void);
 void MX_USART3_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void Serial3_Send(unsigned char c);
-void Serial3_Send_String(char* s);
-void Serial2_Send(unsigned char c);
-void Serial2_Send_String(char* s);
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
